@@ -1,0 +1,851 @@
+Prueba la IA directamente en tus apps favoritas … Usa Gemini para generar borradores y perfeccionar contenido, y obtén Gemini Pro con acceso a la IA de nueva generación de Google por COP 79,000 COP 20,000 durante 3 meses
+100%
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENA SpaceHub - Guía Clase 6 (Préstamos & Dashboard)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sena: { DEFAULT: '#39A900', dark: '#2d8600', light: '#4cc213' },
+                        dark: { bg: '#0f172a', card: '#1e293b', border: '#334155' }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- PrismJS Theme -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        pre[class*="language-"] {
+            border-radius: 0.75rem;
+            margin: 0;
+            background: #0f172a;
+            border: 1px solid #334155;
+            padding: 1.5rem;
+        }
+        code[class*="language-"], pre[class*="language-"] {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        
+        .sidebar-open { transform: translateX(0); }
+        .sidebar-closed { transform: translateX(-100%); }
+        @media (min-width: 1024px) {
+            .sidebar-closed { transform: translateX(0); }
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-slate-300 min-h-screen flex flex-col selection:bg-sena selection:text-white">
+
+    <!-- Top Navbar -->
+    <nav class="bg-dark-card border-b border-dark-border sticky top-0 z-50 shadow-lg shrink-0">
+        <div class="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <button id="menuBtn" class="lg:hidden p-2 -ml-2 text-slate-400 hover:text-white focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                    <div class="w-8 h-8 rounded-full bg-sena flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-sena/20">S</div>
+                    <span class="font-bold text-xl text-white tracking-wide hidden sm:block">Space<span class="text-sena">Hub</span></span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="text-xs font-semibold text-sena bg-sena/10 border border-sena/20 px-3 py-1.5 rounded-full flex items-center gap-2">
+                        <span class="relative flex h-2 w-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-sena opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-sena"></span>
+                        </span>
+                        Clase 6: Préstamos + Modales + SweetAlert2 + Reto Dashboard
+                    </span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Layout Container -->
+    <div class="flex-1 flex max-w-[90rem] mx-auto w-full relative">
+
+        <!-- Sidebar Navigation -->
+        <aside id="sidebar" class="sidebar-closed w-72 bg-dark-card/95 backdrop-blur-xl border-r border-dark-border fixed lg:sticky top-16 h-[calc(100vh-4rem)] z-40 transition-transform duration-300 ease-in-out overflow-y-auto">
+            <div class="p-6">
+                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Índice de Contenidos</h3>
+                <nav class="space-y-1" id="toc-nav">
+                    <a href="#intro" class="toc-link block px-3 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">🚀 Introducción</a>
+                    <a href="#analisis" class="toc-link block px-3 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">1. Análisis y Reglas (RBAC)</a>
+                    <a href="#backend" class="toc-link block px-3 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">2. El Cerebro (Backend API)</a>
+                    <a href="#service" class="toc-link block px-3 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">3. Capa de Servicios</a>
+                    <a href="#ui" class="toc-link block px-3 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">4. Interfaz, Modales & SweetAlert2</a>
+                    <a href="#rutas" class="toc-link block px-3 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">5. Conectando las Rutas</a>
+                    <a href="#reto" class="toc-link block px-3 py-2 rounded-lg text-sm font-medium text-amber-400 hover:text-white hover:bg-slate-800 transition-colors">🏆 Reto: Dashboard Analítico</a>
+                </nav>
+
+                
+            </div>
+        </aside>
+
+        <!-- Overlay for mobile sidebar -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden"></div>
+
+        <!-- Content Area -->
+        <main class="flex-1 min-w-0 px-4 sm:px-8 lg:px-12 py-10">
+            
+            <!-- Hero Section -->
+            <section id="intro" class="mb-16 scroll-mt-24">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">
+                    Clase 6: Módulo de Préstamos Inteligentes & <br/>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-sena to-sena-light">El Reto del Dashboard Analítico</span>
+                </h1>
+                <p class="text-lg text-slate-400 leading-relaxed max-w-3xl mb-8">
+                    ¡Bienvenidos! Hoy consolidamos el módulo completo de préstamos con control estricto de roles (RBAC), ventanas modales interactivas, confirmaciones profesionales con SweetAlert2 y abrimos el terreno para el reto del panel analítico principal.
+                </p>
+            </section>
+
+            <!-- Section 1: Análisis -->
+            <section id="analisis" class="mb-16 scroll-mt-24 relative">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="bg-dark-card border border-dark-border text-sena w-8 h-8 rounded-lg flex items-center justify-center text-sm shadow-sm">1</span>
+                    Reglas del Juego (Análisis y RBAC)
+                </h2>
+                <p class="mb-6 text-slate-300 leading-relaxed">
+                    Mantenemos el principio de <strong>Control de Acceso Basado en Roles (RBAC)</strong> para proteger la integridad de los equipos asignados en los ambientes SENA.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 hover:border-sena/50 transition-colors group">
+                        <h3 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                            <span class="bg-slate-700 p-1.5 rounded-md text-slate-300">🎓</span>
+                            Aprendiz
+                        </h3>
+                        <ul class="text-sm text-slate-400 space-y-2 list-disc list-inside">
+                            <li>Autoservicio automático: sus datos de ficha se cargan desde el token JWT.</li>
+                            <li>Privacidad estricta: solo visualiza su propio historial de equipos prestados.</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 hover:border-blue-500/50 transition-colors group">
+                        <h3 class="text-lg font-bold text-white mb-3 flex items-center gap-2">
+                            <span class="bg-slate-700 p-1.5 rounded-md text-slate-300">🛡️</span>
+                            Administrador
+                        </h3>
+                        <ul class="text-sm text-slate-400 space-y-2 list-disc list-inside">
+                            <li>Gestión global: capacidad de registrar préstamos a cualquier aprendiz.</li>
+                            <li>Operatividad: visualización de todos los registros y habilitación de devoluciones mediante SweetAlert2.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Backend Préstamos -->
+            <section id="backend" class="mb-16 scroll-mt-24">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="bg-dark-card border border-dark-border text-sena w-8 h-8 rounded-lg flex items-center justify-center text-sm shadow-sm">2</span>
+                    El Cerebro: Préstamos en el Backend (<code class="text-lg font-mono text-slate-400">server.js</code>)
+                </h2>
+                <p class="text-slate-300 mb-4 leading-relaxed">
+                    Agregamos los endpoints tradicionales de préstamos para listar, crear y devolver equipos de cómputo en tu servidor Express.
+                </p>
+
+                <div class="rounded-xl overflow-hidden shadow-2xl border border-dark-border">
+                    <div class="bg-slate-800/80 px-4 py-2 border-b border-dark-border flex justify-between items-center">
+                        <span class="text-xs font-mono text-slate-400">server.js (Endpoints de Préstamos)</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs font-bold text-yellow-500">JavaScript (Express)</span>
+                            <button class="copy-btn flex items-center gap-1 text-slate-400 hover:text-white transition-colors p-1 rounded hover:bg-slate-700 cursor-pointer" title="Copiar código">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                <span class="text-xs font-sans font-medium">Copiar</span>
+                            </button>
+                        </div>
+                    </div>
+<pre><code class="language-javascript">// --- ENDPOINTS DE PRÉSTAMOS ---
+
+// --- ENDPOINTS DE PRÉSTAMOS ---
+let PRESTAMOS = [
+  { id: 1, userId: 101, equipoPlaca: 'SENA-1001', horaInicio: '08:00 AM', estado: 'Activo', creadoPorRol: 'Aprendiz' }
+];
+
+// Función helper para obtener info completa del préstamo con datos del usuario
+const getPrestamosConDetalles = (prestamos) => {
+  return prestamos.map(p => {
+    const usuario = USERS.find(u => u.id === p.userId);
+    return {
+      id: p.id,
+      userId: p.userId,
+      aprendiz: usuario?.nombreCompleto || 'Desconocido',
+      ficha: usuario?.ficha || 'N/A',
+      equipoPlaca: p.equipoPlaca,
+      horaInicio: p.horaInicio,
+      estado: p.estado,
+      creadoPorRol: p.creadoPorRol
+    };
+  });
+};
+
+app.get('/api/v1/prestamos', authenticateToken, (req, res) => {
+  if (req.user.role === 'Aprendiz') {
+    const misPrestamos = PRESTAMOS.filter(p => p.userId === req.user.sub);
+    return res.json(getPrestamosConDetalles(misPrestamos));
+  }
+  res.json(getPrestamosConDetalles(PRESTAMOS));
+});
+
+app.post('/api/v1/prestamos', authenticateToken, (req, res) => {
+  const { aprendizId, equipoPlaca } = req.body;
+  
+  // Determinar el ID del aprendiz
+  let userId;
+  if (req.user.role === 'Aprendiz') {
+    userId = req.user.sub; // Usa su propio ID
+  } else {
+    userId = aprendizId; // Admin proporciona el ID
+  }
+  
+  // Validar que el usuario existe
+  const usuario = USERS.find(u => u.id === userId);
+  if (!usuario) {
+    return res.status(404).json({ statusCode: 404, message: 'Aprendiz no encontrado' });
+  }
+  
+  const nuevoPrestamo = {
+    id: Date.now(),
+    userId,
+    equipoPlaca,
+    horaInicio: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    estado: 'Activo',
+    creadoPorRol: req.user.role
+  };
+  PRESTAMOS.unshift(nuevoPrestamo);
+  
+  // Devolver con detalles del usuario
+  const prestamo = getPrestamosConDetalles([nuevoPrestamo])[0];
+  res.status(201).json(prestamo);
+});
+
+app.put('/api/v1/prestamos/:id/devolver', authenticateToken, (req, res) => {
+  const index = PRESTAMOS.findIndex(p => p.id === Number(req.params.id));
+  if (index !== -1) {
+    PRESTAMOS[index].estado = 'Devuelto';
+    const prestamo = getPrestamosConDetalles([PRESTAMOS[index]])[0];
+    res.json(prestamo);
+  } else {
+    res.status(404).json({ message: 'Préstamo no encontrado' });
+  }
+});
+
+
+</code></pre>
+                </div>
+            </section>
+
+            <!-- Section 3: Service -->
+            <section id="service" class="mb-16 scroll-mt-24">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="bg-dark-card border border-dark-border text-sena w-8 h-8 rounded-lg flex items-center justify-center text-sm shadow-sm">3</span>
+                    Capa de Servicios (<code class="text-lg font-mono text-slate-400">prestamosService.ts</code>)
+                </h2>
+                <p class="text-slate-300 mb-6 leading-relaxed">
+                    Estructuramos el servicio frontend para comunicarnos limpiamente con el backend respetando la arquitectura limpia y usando <code class="text-sena font-mono">apiFetch</code>.
+                </p>
+
+                <div class="rounded-xl overflow-hidden shadow-2xl border border-dark-border">
+                    <div class="bg-slate-800/80 px-4 py-2 border-b border-dark-border flex justify-between items-center">
+                        <span class="text-xs font-mono text-slate-400">src/services/prestamosService.ts</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs font-bold text-blue-400">TypeScript</span>
+                            <button class="copy-btn flex items-center gap-1 text-slate-400 hover:text-white transition-colors p-1 rounded hover:bg-slate-700 cursor-pointer" title="Copiar código">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                <span class="text-xs font-sans font-medium">Copiar</span>
+                            </button>
+                        </div>
+                    </div>
+<pre><code class="language-typescript">import { apiFetch } from './api';
+
+export interface Prestamo {
+  id: number;
+  aprendiz: string;
+  ficha: string;
+  equipoPlaca: string;
+  horaInicio: string;
+  estado: 'Activo' | 'Devuelto';
+  creadoPorRol: string;
+}
+
+export const prestamosService = {
+  getAll: async (): Promise&lt;Prestamo[]&gt; => {
+    return apiFetch&lt;Prestamo[]&gt;('/prestamos');
+  },
+  create: async (data: { aprendiz: string; ficha: string; equipoPlaca: string }): Promise&lt;Prestamo&gt; => {
+    return apiFetch&lt;Prestamo&gt;('/prestamos', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+  devolver: async (id: number): Promise&lt;Prestamo&gt; => {
+    return apiFetch&lt;Prestamo&gt;(`/prestamos/${id}/devolver`, {
+      method: 'PUT',
+    });
+  }
+};
+
+export default prestamosService;</code></pre>
+                </div>
+            </section>
+
+            <!-- Section 4: UI & Modal -->
+            <section id="ui" class="mb-16 scroll-mt-24">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="bg-dark-card border border-dark-border text-sena w-8 h-8 rounded-lg flex items-center justify-center text-sm shadow-sm">4</span>
+                    La Interfaz, Ventana Modal y Alertas (<code class="text-lg font-mono text-slate-400">PrestamoModal.tsx</code> & <code class="text-lg font-mono text-slate-400">PrestamosPage.tsx</code>)
+                </h2>
+                <p class="text-slate-300 mb-6 leading-relaxed">
+                    Para optimizar la experiencia de usuario, encapsularemos el formulario de registro dentro de una <strong>Ventana Modal independiente</strong> y utilizaremos <strong>SweetAlert2</strong> para reemplazar los confirm nativos.
+                </p>
+
+                <div class="space-y-6">
+                    <div class="bg-slate-800/80 border border-slate-700 p-5 rounded-xl">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-bold text-white">1. Componente Modal de Registro (<code class="text-sena font-mono text-xs">src/components/PrestamoModal.tsx</code>)</h4>
+                            <button class="copy-btn flex items-center gap-1 text-slate-400 hover:text-white transition-colors p-1 rounded hover:bg-slate-700 cursor-pointer" title="Copiar código">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                <span class="text-xs font-sans font-medium">Copiar</span>
+                            </button>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-3">Crea este archivo en <code class="text-sena font-mono">src/components/PrestamoModal.tsx</code>:</p>
+                        <div class="rounded-xl overflow-hidden border border-slate-700">
+<pre><code class="language-tsx">import React, { useState } from 'react';
+import type { Equipo } from '../../../services/equiposService';
+
+interface Props {
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (data: { aprendiz: string; ficha: string; equipoPlaca: string }) => Promise&lt;void&gt;;
+  isAdmin: boolean;
+  defaultNombre: string;
+  defaultFicha: string;
+  equipos: Equipo[];
+}
+
+export default function PrestamoModal({ isOpen, onClose, onSubmit, isAdmin, defaultNombre, defaultFicha, equipos }: Props) {
+  const [equipoPlaca, setEquipoPlaca] = useState('');
+  const [aprendiz, setAprendiz] = useState(defaultNombre);
+  const [ficha, setFicha] = useState(defaultFicha);
+  const [loading, setLoading] = useState(false);
+
+  if (!isOpen) return null;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      await onSubmit({ aprendiz, ficha, equipoPlaca });
+      setEquipoPlaca('');
+      onClose();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    &lt;div className="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4"&gt;
+      &lt;div className="bg-slate-900 border border-slate-700 w-full max-w-md rounded-2xl p-6 shadow-2xl text-white relative"&gt;
+        &lt;div className="flex justify-between items-center mb-4 border-b border-slate-800 pb-3"&gt;
+          &lt;h3 className="text-lg font-bold text-sena"&gt;Registrar Nuevo Préstamo&lt;/h3&gt;
+          &lt;button onClick={onClose} className="text-slate-400 hover:text-white font-bold cursor-pointer"&gt;✕&lt;/button&gt;
+        &lt;/div&gt;
+
+        &lt;form onSubmit={handleSubmit} className="space-y-4 font-mono text-xs"&gt;
+          &lt;div&gt;
+            &lt;label className="block font-bold text-slate-300 mb-1"&gt;Seleccionar Equipo&lt;/label&gt;
+            &lt;select required value={equipoPlaca} onChange={(e) => setEquipoPlaca(e.target.value)} className="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-white"&gt;
+              &lt;option value=""&gt;-- Selecciona un equipo --&lt;/option&gt;
+              {equipos.map((equipo) => (
+                &lt;option key={equipo.id} value={equipo.placaSena}&gt;
+                  {equipo.placaSena} - {equipo.marcaModelo}
+                &lt;/option&gt;
+              ))}
+            &lt;/select&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;label className="block font-bold text-slate-300 mb-1"&gt;Aprendiz&lt;/label&gt;
+            &lt;input type="text" required value={aprendiz} onChange={(e) => setAprendiz(e.target.value)} disabled={!isAdmin} className="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-white disabled:opacity-50" /&gt;
+          &lt;/div&gt;
+          &lt;div&gt;
+            &lt;label className="block font-bold text-slate-300 mb-1"&gt;Ficha&lt;/label&gt;
+            &lt;input type="text" required value={ficha} onChange={(e) => setFicha(e.target.value)} disabled={!isAdmin} className="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-white disabled:opacity-50" /&gt;
+          &lt;/div&gt;
+
+          &lt;div className="flex justify-end gap-3 pt-4 font-sans"&gt;
+            &lt;button type="button" onClick={onClose} className="px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-bold cursor-pointer"&gt;Cancelar&lt;/button&gt;
+            &lt;button type="submit" disabled={loading} className="px-4 py-2 bg-sena hover:bg-emerald-600 text-slate-900 font-extrabold rounded-xl text-xs cursor-pointer"&gt;{loading ? 'Guardando...' : 'Asignar Equipo'}&lt;/button&gt;
+          &lt;/div&gt;
+        &lt;/form&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-800/80 border border-slate-700 p-5 rounded-xl">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-bold text-white">2. Página Principal del Módulo (<code class="text-sena font-mono text-xs">src/pages/PrestamosPage.tsx</code>)</h4>
+                            <button class="copy-btn flex items-center gap-1 text-slate-400 hover:text-white transition-colors p-1 rounded hover:bg-slate-700 cursor-pointer" title="Copiar código">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                <span class="text-xs font-sans font-medium">Copiar</span>
+                            </button>
+                        </div>
+                        <p class="text-sm text-slate-400 mb-4">Implementación funcional con fases de desarrollo. Copia el código completo de una vez:</p>
+                        
+                        <div class="rounded-xl overflow-hidden border border-slate-700">
+<pre><code class="language-tsx">import React, { useEffect, useState } from 'react';
+import { prestamosService, type Prestamo } from '../../services/prestamosService';
+import { equiposService, type Equipo } from '../../services/equiposService';
+import { useAuth } from '../../context/AuthContext';
+import PrestamoModal from './components/PrestamoModal';
+import Swal from 'sweetalert2';
+
+export default function PrestamosPage() {
+  const [prestamos, setPrestamos] = useState&lt;Prestamo[]&gt;([]);
+  const [equipos, setEquipos] = useState&lt;Equipo[]&gt;([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState&lt;string | null&gt;(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const { isAdmin, user } = useAuth();
+
+  // --- FASE 1: Carga de datos desde el servidor ---
+  const loadPrestamos = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const [prestamosData, equiposData] = await Promise.all([
+        prestamosService.getAll(),
+        equiposService.getAll()
+      ]);
+      setPrestamos(prestamosData);
+      setEquipos(equiposData);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Error al cargar');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { loadPrestamos(); }, []);
+
+  // --- FASE 2: Crear préstamo y mostrar alertas ---
+  const handleCrearPrestamo = async (data: { aprendiz: string; ficha: string; equipoPlaca: string }) => {
+    try {
+      await prestamosService.create(data);
+      loadPrestamos();
+      Swal.fire({
+        title: '¡Registrado!',
+        text: 'El préstamo se ha creado exitosamente.',
+        icon: 'success',
+        background: '#1e293b',
+        color: '#fff',
+        confirmButtonColor: '#39A900'
+      });
+    } catch (err: unknown) {
+      Swal.fire({ title: 'Error', text: 'No se pudo registrar el préstamo', icon: 'error', background: '#1e293b', color: '#fff' });
+    }
+  };
+
+  // --- FASE 2: Devolver equipo ---
+  const handleDevolver = async (id: number) => {
+    const result = await Swal.fire({
+      title: '¿Confirmar Devolución?',
+      text: "El equipo quedará nuevamente disponible en el inventario.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#39A900',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, registrar devolución',
+      cancelButtonText: 'Cancelar',
+      background: '#1e293b',
+      color: '#fff'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await prestamosService.devolver(id);
+        loadPrestamos();
+        Swal.fire({
+          title: '¡Devuelto!',
+          text: 'El equipo ha sido devuelto exitosamente.',
+          icon: 'success',
+          background: '#1e293b',
+          color: '#fff',
+          confirmButtonColor: '#39A900'
+        });
+      } catch (err) {
+        Swal.fire({ title: 'Error', text: 'No se pudo procesar la devolución', icon: 'error', background: '#1e293b', color: '#fff' });
+      }
+    }
+  };
+
+  // --- INTERFAZ: Listado de préstamos ---
+  return (
+    &lt;div className="space-y-6"&gt;
+      &lt;!-- Encabezado con botón para nuevo préstamo --&gt;
+      &lt;div className="p-6 bg-slate-800 border border-slate-700 rounded-2xl text-white shadow-xl flex justify-between items-center"&gt;
+        &lt;div&gt;
+          &lt;h2 className="text-xl font-bold text-sena"&gt;Gestión de Préstamos&lt;/h2&gt;
+          &lt;p className="text-xs text-slate-400"&gt;Control de asignación y devoluciones de equipos de cómputo.&lt;/p&gt;
+        &lt;/div&gt;
+        &lt;button onClick={() => setIsModalOpen(true)} className="px-4 py-2.5 bg-sena hover:bg-emerald-600 text-slate-900 font-extrabold rounded-xl text-xs transition shadow-lg"&gt;
+          + Nuevo Préstamo
+        &lt;/button&gt;
+      &lt;/div&gt;
+
+      &lt;!-- Tabla de préstamos (FASE 1) --&gt;
+      &lt;div className="p-6 bg-slate-800 border border-slate-700 rounded-2xl text-white shadow-xl"&gt;
+        &lt;h2 className="text-xl font-bold text-sena mb-4"&gt;Historial de Préstamos Activos&lt;/h2&gt;
+        
+        {error && &lt;div className="p-3 mb-4 bg-rose-900/80 border border-rose-500 rounded-xl text-rose-200 text-xs font-mono"&gt;{error}&lt;/div&gt;}
+
+        {loading ? (
+          &lt;div className="text-center py-8 text-slate-400 font-mono text-xs animate-pulse"&gt;Conectando con el servidor...&lt;/div&gt;
+        ) : (
+          &lt;div className="overflow-x-auto rounded-xl border border-slate-700"&gt;
+            &lt;table className="w-full text-left text-xs font-mono"&gt;
+              &lt;thead className="bg-slate-900 text-slate-400 uppercase"&gt;
+                &lt;tr&gt;
+                  &lt;th className="p-3"&gt;Aprendiz / Ficha&lt;/th&gt;
+                  &lt;th className="p-3"&gt;Equipo (Placa)&lt;/th&gt;
+                  &lt;th className="p-3"&gt;Hora Salida&lt;/th&gt;
+                  &lt;th className="p-3"&gt;Estado&lt;/th&gt;
+                  &lt;th className="p-3 text-right"&gt;Acciones&lt;/th&gt;
+                &lt;/tr&gt;
+              &lt;/thead&gt;
+              &lt;tbody className="divide-y divide-slate-700/60"&gt;
+                {prestamos.map((p) => (
+                  &lt;tr key={p.id} className="hover:bg-slate-750/50 transition-colors"&gt;
+                    &lt;td className="p-3 text-white font-sans"&gt;
+                      {p.aprendiz} &lt;span className="text-slate-500 block text-[10px]"&gt;Ficha: {p.ficha}&lt;/span&gt;
+                    &lt;/td&gt;
+                    &lt;td className="p-3 text-sena font-bold"&gt;{p.equipoPlaca}&lt;/td&gt;
+                    &lt;td className="p-3 text-slate-400"&gt;{p.horaInicio}&lt;/td&gt;
+                    &lt;td className="p-3"&gt;
+                      &lt;span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${p.estado === 'Activo' ? 'bg-sky-500/20 text-sky-400' : 'bg-slate-500/20 text-slate-400'}`}&gt;
+                        {p.estado}
+                      &lt;/span&gt;
+                    &lt;/td&gt;
+                    &lt;!-- Botón de devolución (FASE 2) --&gt;
+                    &lt;td className="p-3 text-right font-sans"&gt;
+                      {p.estado === 'Activo' && isAdmin && (
+                        &lt;button onClick={() => handleDevolver(p.id)} className="px-3 py-1.5 bg-slate-700 hover:bg-sky-600 rounded-lg text-xs font-bold transition shadow"&gt;
+                          Devolver
+                        &lt;/button&gt;
+                      )}
+                    &lt;/td&gt;
+                  &lt;/tr&gt;
+                ))}
+                {prestamos.length === 0 && (
+                  &lt;tr&gt;
+                    &lt;td colSpan={5} className="p-6 text-center text-slate-500 font-sans"&gt;No hay préstamos registrados.&lt;/td&gt;
+                  &lt;/tr&gt;
+                )}
+              &lt;/tbody&gt;
+            &lt;/table&gt;
+          &lt;/div&gt;
+        )}
+      &lt;/div&gt;
+
+      &lt;!-- Modal (FASE 3) --&gt;
+      &lt;PrestamoModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleCrearPrestamo}
+        isAdmin={isAdmin}
+        defaultNombre={user?.nombreCompleto || ''}
+        defaultFicha={user?.ficha || ''}
+        equipos={equipos}
+      /&gt;
+    &lt;/div&gt;
+  );
+}</code></pre>
+                        </div>
+
+                        <div class="mt-6 p-4 bg-slate-900 border border-slate-700 rounded-lg text-sm text-slate-300">
+                            <span class="text-amber-400 font-bold block mb-3">📋 Cómo probar por fases:</span>
+                            <ul class="space-y-2 list-disc list-inside text-xs">
+                                <li><strong>FASE 1 (Básica):</strong> Solo copia el código y prueba que el listado de préstamos se carga y muestra la tabla.</li>
+                                <li><strong>FASE 2 (Interacción):</strong> Verifica que los botones "Devolver" funcionan y muestran las alertas de confirmación.</li>
+                                <li><strong>FASE 3 (Completa):</strong> Una vez que todo funciona, activa el modal para crear nuevos préstamos.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: Rutas -->
+            <section id="rutas" class="mb-16 scroll-mt-24">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="bg-dark-card border border-dark-border text-sena w-8 h-8 rounded-lg flex items-center justify-center text-sm shadow-sm">5</span>
+                    Conectando las Rutas (<code class="text-lg font-mono text-slate-400">App.tsx</code>)
+                </h2>
+                <p class="text-slate-300 mb-6 leading-relaxed">
+                    Inyectamos la nueva página de préstamos en el Nivel 1 de protección de tu <code>App.tsx</code>.
+                </p>
+
+                <div class="rounded-xl overflow-hidden shadow-2xl border border-dark-border">
+                    <div class="bg-slate-800/80 px-4 py-2 border-b border-dark-border flex justify-between items-center">
+                        <span class="text-xs font-mono text-slate-400">src/App.tsx (Fragmento)</span>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs font-bold text-cyan-400">TSX (React)</span>
+                            <button class="copy-btn flex items-center gap-1 text-slate-400 hover:text-white transition-colors p-1 rounded hover:bg-slate-700 cursor-pointer" title="Copiar código">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                <span class="text-xs font-sans font-medium">Copiar</span>
+                            </button>
+                        </div>
+                    </div>
+<pre><code class="language-tsx">import { Routes, Route, Navigate } from 'react-router-dom';
+import PrestamosPage from './pages/PrestamosPage/PrestamosPage';
+
+export default function App() {
+  return (
+    &lt;Routes&gt;
+      &lt;Route path="/login" element={&lt;LoginPage /&gt;} /&gt;
+
+      &lt;Route element={&lt;ProtectedRoute /&gt;}&gt;
+        &lt;Route path="/" element={&lt;MainLayout /&gt;}&gt;
+          &lt;Route index element={&lt;Navigate to="/dashboard" replace /&gt;} /&gt;
+          &lt;Route path="dashboard" element={&lt;DashboardPage /&gt;} /&gt;
+          &lt;Route path="inventario" element={&lt;EquiposPage /&gt;} /&gt;
+          
+          &lt;Route path="prestamos" element={&lt;PrestamosPage /&gt;} /&gt;
+
+          &lt;Route element={&lt;ProtectedRoute requiredRole="Administrador" /&gt;}&gt;
+            &lt;Route path="inventario/nuevo" element={&lt;NuevoEquipoPage /&gt;} /&gt;
+            &lt;Route path="inventario/:placaSena" element={&lt;DetalleEquipoPage /&gt;} /&gt;
+          &lt;/Route&gt;
+        &lt;/Route&gt;
+      &lt;/Route&gt;
+
+      &lt;Route path="*" element={&lt;Navigate to="/login" replace /&gt;} /&gt;
+    &lt;/Routes&gt;
+  );
+}</code></pre>
+                </div>
+            </section>
+
+            <!-- Section 6: Reto Dashboard -->
+            <section id="reto" class="mb-16 scroll-mt-24">
+                <div class="bg-gradient-to-br from-amber-900/30 via-slate-900 to-slate-900 border-2 border-amber-500/40 p-8 rounded-2xl shadow-2xl relative overflow-hidden">
+                    <div class="absolute -right-10 -top-10 w-40 h-40 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                    
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">Reto Práctico del Estudiante</span>
+                    </div>
+
+                    <h2 class="text-3xl font-extrabold text-white mb-4">
+                        🏆 Reto: El Dashboard Analítico Gerencial
+                    </h2>
+
+                    <p class="text-slate-300 leading-relaxed mb-6">
+                        Para alimentar el panel gerencial (que incluye tarjetas de indicadores de equipos operativos, tasas de ocupación por ambiente y gráficos circulares de estado), los aprendices deben construir la vista <code class="text-amber-300 font-mono">DashboardPage.tsx</code> y conectarla al servidor backend mediante un endpoint analítico robusto.
+                    </p>
+
+                    <div class="space-y-6 mb-8">
+                        <div class="bg-slate-800/80 border border-slate-700 p-5 rounded-xl">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="font-bold text-white flex items-center gap-2">
+                                    <span class="text-amber-400">1.</span> Endpoint Analítico en el Backend (<code class="text-amber-300 font-mono text-xs">server.js</code>)
+                                </h4>
+                                <button class="copy-btn flex items-center gap-1 text-slate-400 hover:text-white transition-colors p-1 rounded hover:bg-slate-700 cursor-pointer" title="Copiar código">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                    <span class="text-xs font-sans font-medium">Copiar</span>
+                                </button>
+                            </div>
+                            <p class="text-sm text-slate-400 mb-3">
+                                Agrega este endpoint en tu servidor Express para recopilar y calcular los datos estadísticos que requiere el panel:
+                            </p>
+                            <div class="rounded-xl overflow-hidden border border-slate-700">
+<pre><code class="language-javascript">// --- ENDPOINT ANALÍTICO PARA EL DASHBOARD ---
+app.get('/api/v1/dashboard/stats', authenticateToken, (req, res) => {
+  const totalEquipos = EQUIPOS.length;
+  const equiposOperativos = EQUIPOS.filter(e => e.estado === 'Operativo').length;
+  const equiposMantenimiento = EQUIPOS.filter(e => e.estado === 'Mantenimiento' || e.estado === 'Dañado').length;
+  const prestamosActivos = PRESTAMOS.filter(p => p.estado === 'Activo').length;
+  
+  const incidenciasAlta = EQUIPOS.filter(e => e.estado === 'Dañado').length;
+  const incidenciasMedia = EQUIPOS.filter(e => e.estado === 'Mantenimiento').length;
+
+  res.json({
+    totalEquipos,
+    equiposOperativos,
+    equiposMantenimiento,
+    prestamosActivos,
+    tasaOcupacionGlobal: totalEquipos > 0 ? Math.round((prestamosActivos / totalEquipos) * 100) + '%' : '0%',
+    incidencias: {
+      total: incidenciasAlta + incidenciasMedia,
+      alta: incidenciasAlta,
+      media: incidenciasMedia
+    },
+    laboratoriosOcupacion: [
+      { nombre: 'Ambiente 301 - Desarrollo Web (ADSO)', porcentaje: 90, activo: true },
+      { nombre: 'Ambiente 302 - Redes y Bases de Datos', porcentaje: 75, activo: true },
+      { nombre: 'Ambiente 303 - Mantenimiento Hardware', porcentaje: 40, activo: false }
+    ]
+  });
+});</code></pre>
+                            </div>
+
+                            <div class="mt-4 p-4 bg-slate-900 border border-slate-700 rounded-lg text-xs font-mono text-slate-300">
+                                <span class="text-amber-400 font-bold block mb-1">📖 Documentación del JSON de Respuesta:</span>
+                                <pre class="text-slate-400">{
+  "totalEquipos": 12,
+  "equiposOperativos": 10,
+  "equiposMantenimiento": 2,
+  "prestamosActivos": 3,
+  "tasaOcupacionGlobal": "25%",
+  "incidencias": { "total": 2, "alta": 1, "media": 1 },
+  "laboratoriosOcupacion": [
+    { "nombre": "Ambiente 301 - Desarrollo Web (ADSO)", "porcentaje": 90, "activo": true },
+    { "nombre": "Ambiente 302 - Redes y Bases de Datos", "porcentaje": 75, "activo": true },
+    { "nombre": "Ambiente 303 - Mantenimiento Hardware", "porcentaje": 40, "activo": false }
+  ]
+}</pre>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-800/80 border border-slate-700 p-5 rounded-xl">
+                            <h4 class="font-bold text-white mb-2 flex items-center gap-2">
+                                <span class="text-amber-400">2.</span> Paso a Paso y Recomendaciones para el Frontend
+                            </h4>
+                            <p class="text-sm text-slate-400 mb-3">
+                                Para construir las tarjetas y las barras de progreso que se muestran en el diseño gerencial, te recomendamos seguir esta estructura:
+                            </p>
+                            <ul class="text-sm text-slate-300 space-y-2 list-disc list-inside mb-4">
+                                <li><strong>Paso 1 - Crear el Servicio:</strong> Crea un archivo <code>src/services/dashboardService.ts</code> que consuma <code class="text-amber-300 font-mono">apiFetch('/dashboard/stats')</code>.</li>
+                                <li><strong>Paso 2 - Construir la Vista:</strong> En tu componente <code>src/pages/DashboardPage.tsx</code>, utiliza un <code class="text-amber-300 font-mono">useEffect</code> para invocar el servicio al cargar la página y guarda los datos en un estado local.</li>
+                                <li><strong>Paso 3 - Librerías Recomendadas para Gráficos:</strong> Puedes usar <strong>Recharts</strong> o <strong>Chart.js</strong>, o bien diseñar barras de progreso dinámicas con Tailwind CSS usando contenedores <code class="text-amber-300 font-mono">w-full bg-slate-700 rounded-full h-3</code> y el estilo interno <code class="text-amber-300 font-mono">style={{ width: `${lab.porcentaje}%` }}</code>.</li>
+                            </ul>
+                            <div class="p-3 bg-slate-900 border border-slate-700 rounded-lg text-xs font-mono text-slate-400">
+                                💡 <strong>Consejo Pro:</strong> Asegúrate de manejar un estado de carga (<code class="text-amber-300 font-mono">loading</code>) mientras el servidor procesa los contadores del sistema.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-tsx.min.js"></script>
+    
+    <script>
+        const menuBtn = document.getElementById('menuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('sidebar-overlay');
+        const links = document.querySelectorAll('.toc-link');
+
+        function toggleMenu() {
+            sidebar.classList.toggle('sidebar-closed');
+            sidebar.classList.toggle('sidebar-open');
+            overlay.classList.toggle('hidden');
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', toggleMenu);
+        
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 1024) toggleMenu();
+            });
+        });
+
+        const observerOptions = { root: null, rootMargin: '-20% 0px -60% 0px', threshold: 0 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    links.forEach(link => {
+                        link.classList.remove('bg-sena', 'text-white');
+                        link.classList.add('text-slate-400');
+                    });
+                    const activeLink = document.querySelector(`.toc-link[href="#${entry.target.id}"]`);
+                    if(activeLink) {
+                        activeLink.classList.remove('text-slate-400');
+                        activeLink.classList.add('bg-sena', 'text-white');
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section[id]').forEach((section) => {
+            observer.observe(section);
+        });
+
+        // Corregido: Buscador exacto del bloque de código hijo dentro de la misma tarjeta contenedora
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Buscar el contenedor principal que contiene el botón y el código
+                let cardContainer = button.closest('div[class*="rounded-xl"], div[class*="rounded-2xl"], section');
+                
+                // Si no encontramos, buscamos el padre del header
+                if (!cardContainer) {
+                    const header = button.closest('div');
+                    cardContainer = header ? header.parentElement : null;
+                }
+                
+                // Buscar el elemento <code> dentro de <pre> (código real, no títulos)
+                let targetCode = cardContainer ? cardContainer.querySelector('pre > code') : null;
+                
+                // Si no hay pre > code, buscar solo en el último code
+                if (!targetCode && cardContainer) {
+                    const allCodes = cardContainer.querySelectorAll('code');
+                    if (allCodes.length > 0) {
+                        targetCode = allCodes[allCodes.length - 1];
+                    }
+                }
+                
+                if (!targetCode) {
+                    console.warn('No se encontró el código para copiar');
+                    return;
+                }
+
+                const textToCopy = targetCode.innerText;
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = textToCopy;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                
+                try {
+                    document.execCommand('copy');
+                    const originalHTML = button.innerHTML;
+                    button.innerHTML = '<svg class="w-4 h-4 text-sena" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg><span class="text-xs font-bold text-sena font-sans">Copiado</span>';
+                    setTimeout(() => {
+                        button.innerHTML = originalHTML;
+                    }, 2000);
+                } catch (err) {
+                    console.error('Error al copiar: ', err);
+                }
+                
+                document.body.removeChild(tempTextArea);
+            });
+        });
+    </script>
+</body>
+</html>
